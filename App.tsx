@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
     // color: '#ffffff,
   },
   book__read: {
-    //
     position: 'absolute',
     bottom: 0,
     right: 0,
@@ -120,36 +119,9 @@ const styles = StyleSheet.create({
   },
 });
 
-// const GET_DOGS = gql`
-//   query GetDogs {
-//     getDogs {
-//       id
-//       name
-//       img
-//     }
-//   }
-// `;
-
-// const GET_IMAGE_BY_DOG_ID = gql`
-//   query GetImageByDogId($id: String!) {
-//     getDogById(id: $id) {
-//       id
-//       img
-//     }
-//   }
-// `;
-
-// interface QueryResult {
-//   getDogs: Array<{
-//     id?: string;
-//     name?: string;
-//     img?: string;
-//   }>;
-// }
-
 const GET_BOOKS = gql`
   query GET_BOOKS {
-    books {
+    Books {
       title
       author {
         name
@@ -159,7 +131,7 @@ const GET_BOOKS = gql`
 `;
 
 interface QueryResult {
-  books: Array<{
+  Books: Array<{
     title: string;
     author: {
       name: string;
@@ -192,64 +164,16 @@ const App = () => {
       onCompleted: () => {
         stopPolling();
       },
+      fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
+      returnPartialData: true,
     },
   );
-
-  // const {data, error, stopPolling, networkStatus, client} = useQuery<
-  //   QueryResult
-  // >(GET_DOGS, {
-  //   pollInterval: 2000,
-  //   onError: () => {
-  //     if (errorCount > MAX_RETRY) {
-  //       stopPolling();
-  //     } else {
-  //       setErrorCount((c) => c + 1);
-  //     }
-  //   },
-  //   onCompleted: () => stopPolling(),
-  //   notifyOnNetworkStatusChange: true,
-  // });
 
   const showError = React.useMemo(
     () => error !== undefined && errorCount > MAX_RETRY,
     [error, errorCount],
   );
-
-  // const [selectedDog, setSelectedDog] = React.useState('');
-  // const handleButtonPress = React.useCallback(
-  //   (id: string) => async () => {
-  //     try {
-  //       const imgData = await client.query({
-  //         query: GET_IMAGE_BY_DOG_ID,
-  //         variables: {id},
-  //       });
-  //       setSelectedDog(imgData.data?.getDogById?.img);
-  //       const cacheData = client.readQuery<QueryResult>({query: GET_DOGS});
-  //       let updatedList: any[] = [];
-  //       if (cacheData) {
-  //         updatedList = cacheData?.getDogs;
-  //         const updatedIndex = updatedList?.findIndex((d) => d.id === id);
-  //         const updated = updatedList?.[updatedIndex];
-  //         if (updated) {
-  //           updated.img = imgData.data?.getDogById?.img;
-  //           updatedList[updatedIndex] = updated;
-  //         }
-  //       } else {
-  //         updatedList = [imgData.data?.getDogById];
-  //       }
-  //       client.writeQuery({
-  //         query: GET_DOGS,
-  //         data: {
-  //           getDogs: updatedList,
-  //         },
-  //       });
-  //     } catch (e) {
-  //       //
-  //     }
-  //   },
-  //   [client],
-  // );
 
   return (
     <>
@@ -261,7 +185,7 @@ const App = () => {
           {showLoadingMask.includes(networkStatus) && !showError && (
             <ActivityIndicator size="large" />
           )}
-          {data?.books?.map((b) => {
+          {data?.Books?.map((b) => {
             return (
               <View key={b.title} style={styles.book}>
                 <View style={styles.book__title}>

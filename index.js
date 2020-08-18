@@ -13,6 +13,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   name: `react-native-${Platform.OS}`,
   version: '1.0.0',
+  connectToDevTools: true,
 });
 
 const RegisterApp = () => (
